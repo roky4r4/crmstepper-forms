@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
-import { ChevronLeft, ChevronRight, Check } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { VehicleType } from "./form-steps/VehicleType";
 import { DownPayment } from "./form-steps/DownPayment";
 import { MonthlyBudget } from "./form-steps/MonthlyBudget";
@@ -154,38 +153,6 @@ export function MultiStepForm() {
     <div className="container mx-auto px-4 py-8 max-w-3xl">
       <Card className="p-6 space-y-8 shadow-lg">
         <div className="space-y-6">
-          <div className="progress-step">
-            <div
-              className="progress-bar"
-              style={{
-                width: `${((currentStep + 1) / steps.length) * 100}%`,
-              }}
-            />
-          </div>
-
-          <div className="flex justify-center items-center space-x-2">
-            {steps.map((step, index) => (
-              <div key={step} className="step-indicator">
-                <div
-                  className={`step-indicator-dot ${
-                    index <= currentStep ? "active" : ""
-                  } ${index < currentStep ? "completed" : ""}`}
-                >
-                  {index < currentStep && (
-                    <Check className="w-2 h-2 text-white" />
-                  )}
-                </div>
-                {index < steps.length - 1 && (
-                  <div
-                    className={`step-indicator-line ${
-                      index < currentStep ? "active" : ""
-                    }`}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-
           <h2 className="text-2xl font-semibold text-center">
             {steps[currentStep]}
           </h2>
