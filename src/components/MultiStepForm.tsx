@@ -4,37 +4,80 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { ChevronLeft, ChevronRight, Check } from "lucide-react";
+import { VehicleType } from "./form-steps/VehicleType";
+import { DownPayment } from "./form-steps/DownPayment";
+import { MonthlyBudget } from "./form-steps/MonthlyBudget";
+import { ExistingVehicle } from "./form-steps/ExistingVehicle";
+import { EmploymentStatus } from "./form-steps/EmploymentStatus";
+import { MonthlyIncome } from "./form-steps/MonthlyIncome";
+import { IncomeLength } from "./form-steps/IncomeLength";
 import { PersonalInfo } from "./form-steps/PersonalInfo";
-import { BusinessDetails } from "./form-steps/BusinessDetails";
-import { ContactPreferences } from "./form-steps/ContactPreferences";
-import { Confirmation } from "./form-steps/Confirmation";
+import { EmploymentInfo } from "./form-steps/EmploymentInfo";
 
 export type FormData = {
+  vehicleType: string;
+  zeroDown: boolean;
+  monthlyBudget: string;
+  existingVehicle: string;
+  employmentStatus: string;
+  monthlyIncome: string;
+  incomeLength: string;
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
-  companyName: string;
-  industry: string;
-  size: string;
-  website: string;
-  preferredContact: string;
-  newsletter: boolean;
-  updates: boolean;
+  dateOfBirth: {
+    day: string;
+    month: string;
+    year: string;
+  };
+  address: {
+    street: string;
+    province: string;
+    city: string;
+    postalCode: string;
+  };
+  employment: {
+    employer: string;
+    position: string;
+    status: string;
+    income: string;
+    type: string;
+    timeAtJob: string;
+  };
 };
 
 const INITIAL_DATA: FormData = {
+  vehicleType: "",
+  zeroDown: false,
+  monthlyBudget: "",
+  existingVehicle: "",
+  employmentStatus: "",
+  monthlyIncome: "",
+  incomeLength: "",
   firstName: "",
   lastName: "",
   email: "",
   phone: "",
-  companyName: "",
-  industry: "",
-  size: "",
-  website: "",
-  preferredContact: "",
-  newsletter: false,
-  updates: false,
+  dateOfBirth: {
+    day: "",
+    month: "",
+    year: "",
+  },
+  address: {
+    street: "",
+    province: "",
+    city: "",
+    postalCode: "",
+  },
+  employment: {
+    employer: "",
+    position: "",
+    status: "",
+    income: "",
+    type: "",
+    timeAtJob: "",
+  },
 };
 
 export function MultiStepForm() {
@@ -42,10 +85,15 @@ export function MultiStepForm() {
   const [formData, setFormData] = useState(INITIAL_DATA);
 
   const steps = [
+    "Vehicle Type",
+    "Down Payment",
+    "Monthly Budget",
+    "Existing Vehicle",
+    "Employment Status",
+    "Monthly Income",
+    "Income Length",
     "Personal Information",
-    "Business Details",
-    "Contact Preferences",
-    "Confirmation",
+    "Employment Information",
   ];
 
   const updateFields = (fields: Partial<FormData>) => {
@@ -68,10 +116,9 @@ export function MultiStepForm() {
     e.preventDefault();
     if (currentStep === steps.length - 1) {
       toast({
-        title: "Form submitted successfully!",
-        description: "We'll be in touch soon.",
+        title: "Application submitted successfully!",
+        description: "We'll be in touch soon with your personalized results.",
       });
-      // Here you would typically send the data to your backend
       console.log("Form submitted:", formData);
     } else {
       next();
@@ -81,13 +128,23 @@ export function MultiStepForm() {
   const renderStep = () => {
     switch (currentStep) {
       case 0:
-        return <PersonalInfo {...formData} updateFields={updateFields} />;
+        return <VehicleType {...formData} updateFields={updateFields} />;
       case 1:
-        return <BusinessDetails {...formData} updateFields={updateFields} />;
+        return <DownPayment {...formData} updateFields={updateFields} />;
       case 2:
-        return <ContactPreferences {...formData} updateFields={updateFields} />;
+        return <MonthlyBudget {...formData} updateFields={updateFields} />;
       case 3:
-        return <Confirmation formData={formData} />;
+        return <ExistingVehicle {...formData} updateFields={updateFields} />;
+      case 4:
+        return <EmploymentStatus {...formData} updateFields={updateFields} />;
+      case 5:
+        return <MonthlyIncome {...formData} updateFields={updateFields} />;
+      case 6:
+        return <IncomeLength {...formData} updateFields={updateFields} />;
+      case 7:
+        return <PersonalInfo {...formData} updateFields={updateFields} />;
+      case 8:
+        return <EmploymentInfo {...formData} updateFields={updateFields} />;
       default:
         return null;
     }
