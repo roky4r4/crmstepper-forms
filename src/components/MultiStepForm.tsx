@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -153,6 +154,15 @@ export function MultiStepForm() {
     <div className="container mx-auto px-4 py-8 max-w-3xl">
       <Card className="p-6 space-y-8 shadow-lg">
         <div className="space-y-6">
+          <div className="progress-step">
+            <div
+              className="progress-bar"
+              style={{
+                width: `${((currentStep + 1) / steps.length) * 100}%`,
+              }}
+            />
+          </div>
+
           <h2 className="text-2xl font-semibold text-center">
             {steps[currentStep]}
           </h2>
