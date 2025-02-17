@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, PenLine, Car, Truck, Bike } from "lucide-react";
 import { VehicleType } from "./form-steps/VehicleType";
 import { DownPayment } from "./form-steps/DownPayment";
 import { MonthlyBudget } from "./form-steps/MonthlyBudget";
@@ -96,6 +96,24 @@ export function MultiStepForm() {
     "Employment Information",
   ];
 
+  const getVehicleIcon = (type: string) => {
+    switch (type.toLowerCase()) {
+      case 'car':
+      case 'suv':
+      case 'van':
+        return Car;
+      case 'truck':
+      case 'rv':
+        return Truck;
+      case 'bike':
+      case 'atv':
+      case 'snowmobile':
+        return Bike;
+      default:
+        return Car;
+    }
+  };
+
   const next = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep((curr) => curr + 1);
@@ -156,6 +174,32 @@ export function MultiStepForm() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-3xl">
+      {formData.vehicleType && currentStep > 0 && (
+        <Card className="p-4 mb-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              {(() => {
+                const IconComponent = getVehicleIcon(formData.vehicleType);
+                return <IconComponent className="h-6 w-6 text-primary" />;
+              })()}
+              <div>
+                <p className="text-sm text-muted-foreground">Selected Vehicle Type</p>
+                <p className="font-medium capitalize">{formData.vehicleType}</p>
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setCurrentStep(0)}
+              className="flex items-center text-primary hover:text-primary/80"
+            >
+              <PenLine className="h-4 w-4 mr-2" />
+              Edit
+            </Button>
+          </div>
+        </Card>
+      )}
+
       <Card className="p-6 space-y-8 shadow-lg">
         <div className="space-y-6">
           <div className="progress-step">
