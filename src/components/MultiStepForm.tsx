@@ -96,10 +96,6 @@ export function MultiStepForm() {
     "Employment Information",
   ];
 
-  const updateFields = (fields: Partial<FormData>) => {
-    setFormData((prev) => ({ ...prev, ...fields }));
-  };
-
   const next = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep((curr) => curr + 1);
@@ -121,6 +117,14 @@ export function MultiStepForm() {
       });
       console.log("Form submitted:", formData);
     } else {
+      next();
+    }
+  };
+
+  const updateFields = (fields: Partial<FormData>) => {
+    setFormData((prev) => ({ ...prev, ...fields }));
+    // Automatically move to next step after selection, but only for radio selection steps
+    if (currentStep < 7) { // Don't auto-advance for PersonalInfo and EmploymentInfo steps
       next();
     }
   };
