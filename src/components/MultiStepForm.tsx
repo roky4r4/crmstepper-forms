@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
-import { ChevronLeft, ChevronRight, PenLine, Car, Truck, Bike } from "lucide-react";
+import { ChevronLeft, ChevronRight, PenLine, Car, Truck, Bike, DollarSign } from "lucide-react";
 import { VehicleType } from "./form-steps/VehicleType";
 import { DownPayment } from "./form-steps/DownPayment";
 import { MonthlyBudget } from "./form-steps/MonthlyBudget";
@@ -114,6 +113,21 @@ export function MultiStepForm() {
     }
   };
 
+  const formatBudget = (budget: string) => {
+    switch (budget) {
+      case "under250":
+        return "Under $250/month";
+      case "251-375":
+        return "$251-$375/month";
+      case "376-500":
+        return "$376-$500/month";
+      case "500plus":
+        return "$500+/month";
+      default:
+        return "";
+    }
+  };
+
   const next = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep((curr) => curr + 1);
@@ -141,8 +155,7 @@ export function MultiStepForm() {
 
   const updateFields = (fields: Partial<FormData>) => {
     setFormData((prev) => ({ ...prev, ...fields }));
-    // Automatically move to next step after selection, but only for radio selection steps
-    if (currentStep < 7) { // Don't auto-advance for PersonalInfo and EmploymentInfo steps
+    if (currentStep < 7) {
       next();
     }
   };
@@ -178,13 +191,27 @@ export function MultiStepForm() {
         <Card className="p-4 mb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              {(() => {
-                const IconComponent = getVehicleIcon(formData.vehicleType);
-                return <IconComponent className="h-6 w-6 text-primary" />;
-              })()}
-              <div>
-                <p className="text-sm text-muted-foreground">Selected Vehicle Type</p>
-                <p className="font-medium capitalize">{formData.vehicleType}</p>
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center space-x-3">
+                  {(() => {
+                    const IconComponent = getVehicleIcon(formData.vehicleType);
+                    return <IconComponent className="h-6 w-6 text-primary" />;
+                  })()}
+                  <div>
+                    <p className="text-sm text-muted-foreground">Selected Vehicle Type</p>
+                    <p className="font-medium capitalize">{formData.vehicleType}</p>
+                  </div>
+                </div>
+                
+                {formData.monthlyBudget && (
+                  <div className="flex items-center space-x-3 pl-9">
+                    <DollarSign className="h-4 w-4 text-muted-foreground" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Monthly Budget</p>
+                      <p className="text-sm">{formatBudget(formData.monthlyBudget)}</p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
             <Button
