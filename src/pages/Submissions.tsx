@@ -16,12 +16,25 @@ type Submission = {
   id: string;
   vehicleType: string;
   monthlyBudget: string;
+  existingVehicle: string;
+  employmentStatus: string;
+  monthlyIncome: string;
+  incomeLength: string;
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
   createdAt: string;
   status: "new" | "contacted" | "qualified" | "closed";
+  zeroDown: boolean;
+  employment: {
+    employer: string;
+    position: string;
+    status: string;
+    income: string;
+    type: string;
+    timeAtJob: string;
+  };
 };
 
 const mockSubmissions: Submission[] = [
@@ -29,23 +42,49 @@ const mockSubmissions: Submission[] = [
     id: "1",
     vehicleType: "car",
     monthlyBudget: "251-375",
+    existingVehicle: "no",
+    employmentStatus: "employed",
+    monthlyIncome: "3000-4500",
+    incomeLength: "12-24",
     firstName: "John",
     lastName: "Doe",
     email: "john@example.com",
     phone: "555-0123",
-    createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), // 1 day ago
+    createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
     status: "new",
+    zeroDown: true,
+    employment: {
+      employer: "Tech Corp",
+      position: "Developer",
+      status: "Full-time",
+      income: "4000",
+      type: "Permanent",
+      timeAtJob: "2 years",
+    },
   },
   {
     id: "2",
     vehicleType: "truck",
     monthlyBudget: "500plus",
+    existingVehicle: "trade",
+    employmentStatus: "self-employed",
+    monthlyIncome: "4500plus",
+    incomeLength: "over24",
     firstName: "Jane",
     lastName: "Smith",
     email: "jane@example.com",
     phone: "555-0124",
-    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days ago
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
     status: "contacted",
+    zeroDown: false,
+    employment: {
+      employer: "Self",
+      position: "Business Owner",
+      status: "Self-employed",
+      income: "6000",
+      type: "Business Owner",
+      timeAtJob: "5 years",
+    },
   },
 ];
 
@@ -95,14 +134,15 @@ export default function Submissions() {
           </div>
         </div>
 
-        <div className="rounded-md border">
+        <div className="rounded-md border overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
-                <TableHead>Vehicle Type</TableHead>
-                <TableHead>Budget</TableHead>
+                <TableHead>Vehicle Info</TableHead>
+                <TableHead>Financial Info</TableHead>
                 <TableHead>Contact</TableHead>
+                <TableHead>Employment Details</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Submitted</TableHead>
               </TableRow>
@@ -117,15 +157,65 @@ export default function Submissions() {
                       </p>
                     </div>
                   </TableCell>
-                  <TableCell className="capitalize">
-                    {submission.vehicleType}
+                  <TableCell>
+                    <div className="space-y-1">
+                      <p className="text-sm">
+                        <span className="font-medium">Type:</span>{" "}
+                        <span className="capitalize">{submission.vehicleType}</span>
+                      </p>
+                      <p className="text-sm">
+                        <span className="font-medium">Existing Vehicle:</span>{" "}
+                        <span className="capitalize">
+                          {submission.existingVehicle}
+                        </span>
+                      </p>
+                      <p className="text-sm">
+                        <span className="font-medium">Zero Down:</span>{" "}
+                        {submission.zeroDown ? "Yes" : "No"}
+                      </p>
+                    </div>
                   </TableCell>
-                  <TableCell>{formatBudget(submission.monthlyBudget)}</TableCell>
+                  <TableCell>
+                    <div className="space-y-1">
+                      <p className="text-sm">
+                        <span className="font-medium">Budget:</span>{" "}
+                        {formatBudget(submission.monthlyBudget)}
+                      </p>
+                      <p className="text-sm">
+                        <span className="font-medium">Monthly Income:</span>{" "}
+                        {submission.monthlyIncome}
+                      </p>
+                      <p className="text-sm">
+                        <span className="font-medium">Income Length:</span>{" "}
+                        {submission.incomeLength}
+                      </p>
+                    </div>
+                  </TableCell>
                   <TableCell>
                     <div className="space-y-1">
                       <p className="text-sm">{submission.email}</p>
                       <p className="text-sm text-muted-foreground">
                         {submission.phone}
+                      </p>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="space-y-1">
+                      <p className="text-sm">
+                        <span className="font-medium">Employer:</span>{" "}
+                        {submission.employment.employer}
+                      </p>
+                      <p className="text-sm">
+                        <span className="font-medium">Position:</span>{" "}
+                        {submission.employment.position}
+                      </p>
+                      <p className="text-sm">
+                        <span className="font-medium">Type:</span>{" "}
+                        {submission.employment.type}
+                      </p>
+                      <p className="text-sm">
+                        <span className="font-medium">Time at Job:</span>{" "}
+                        {submission.employment.timeAtJob}
                       </p>
                     </div>
                   </TableCell>
